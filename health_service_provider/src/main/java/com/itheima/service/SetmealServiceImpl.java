@@ -1,6 +1,8 @@
 package com.itheima.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.itheima.constant.RedisConst;
@@ -10,6 +12,7 @@ import com.itheima.entity.QueryPageBean;
 import com.itheima.pojo.Setmeal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.Map;
  */
 @Service
 public class SetmealServiceImpl implements SetmealService {
+    private final String REDIS_SETMEAL = "Setmeal";
     @Autowired
     SetmealDao setmealDao;
 
@@ -35,6 +39,8 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDao.add(setmeal);
         //2. 维护套餐和检查组的关系
         setRelation(setmeal, checkgroupIds);
+        //删除redis中数据
+        deletJedis();
 
         jedisPool.getResource().srem(RedisConst.SETMEAL_PIC_RESOURCES, setmeal.getImg());
 
@@ -60,18 +66,42 @@ public class SetmealServiceImpl implements SetmealService {
         return new PageResult(pageSetmeal.getTotal(),pageSetmeal.getResult());
     }
 
+    //移动端查询所有套餐
     @Override
     public List<Setmeal> findAll() {
-        return setmealDao.findAll();
+        Jedis jedis = jedisPool.getResource();
+        String redisSetmeal = jedis.get(REDIS_SETMEAL);
+       //JSON字符串转java对象
+        List<Setmeal> setmealList = JSONArray.parseArray(redisSetmeal, Setmeal.class);
+        //redis没有从数据库查
+        if (redisSetmeal == null) {
+            setmealList = setmealDao.findAll();
+            addJedis(setmealList);
+
+        }
+        return setmealList;
+
     }
 
     @Override
     public Setmeal findDetailById(Integer id) {
-        return setmealDao.findDetailsById(id);
+        Jedis jedis = jedisPool.getResource();
+        String s1 = jedis.get(id + "");
+        Setmeal setmeal = JSONArray.parseObject(s1, Setmeal.class);
+        if (s1 == null) {
+             setmeal = setmealDao.findDetailsById(id);
+            String s = JSON.toJSONString(setmeal);
+            jedis.set(id+"",s);
+
+        }
+
+        return setmeal;
     }
 
     @Override
     public Setmeal findById(Integer id) {
+
+
         return setmealDao.findById(id);
     }
 
@@ -79,5 +109,15 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public List<Map<String, Object>> findSetmealCount() {
         return setmealDao.findSetmealCount();
+    }
+
+    private void addJedis(List<Setmeal> setmeal) {
+        Jedis jedis = jedisPool.getResource();
+        String s = JSON.toJSONString(setmeal);
+        jedis.set(REDIS_SETMEAL,s);
+    }
+    private void deletJedis() {
+        Jedis jedis = jedisPool.getResource();
+        jedis.srem(REDIS_SETMEAL);
     }
 }

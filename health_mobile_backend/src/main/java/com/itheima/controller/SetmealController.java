@@ -24,6 +24,7 @@ public class SetmealController {
     @Reference
     SetmealService setmealService;
 
+    //移动端查询所有套餐
     @RequestMapping("/getSetmeal")
     public Result getSetmeal(){
         log.debug("SetmealController： getSetmeal");
