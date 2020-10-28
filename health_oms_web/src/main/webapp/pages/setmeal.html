@@ -96,8 +96,8 @@
                         <el-table-column prop="remark" label="说明" align="center"></el-table-column>
                         <el-table-column label="操作" align="center">
                             <template slot-scope="scope">
-                                <el-button type="primary" size="mini">编辑</el-button>
-                                <el-button size="mini" type="danger">删除</el-button>
+                                <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+                                <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -249,9 +249,11 @@
                 tableData:[],//添加表单窗口中检查组列表数据
                 checkgroupIds:[],//添加表单窗口中检查组复选框对应id
                 dialogFormVisible: false,//控制添加窗口显示/隐藏
+                dialogFormVisible4Edit:false,//控制编辑窗口显示/隐藏
                 backend_url:"http://localhost:82",
                 qiniu_domain_url: "http://qfxjrk1lr.hd-bkt.clouddn.com/", // 七牛测试域名
-                percent: 0 // 进度值
+                percent: 0 ,// 进度值
+                mmName:null,
             },
             created() {
                 this.findPage();
@@ -461,7 +463,52 @@
                     //currentPage为切换后的页码
                     this.pagination.currentPage = currentPage;
                     this.findPage();
-                }
+                },
+
+                //编辑页面弹框
+              /*  handleUpdate(row) {
+                    //1. 弹框
+                    this.dialogFormVisible4Edit = true;
+                    //2. 重置表单
+                    this.resetForm();
+                    //3. 数据回显
+                    //3.1 回显套餐基本数据
+                    let key =  this.mmName;
+                    console.log(key);
+                    axios.get(this.backend_url +"/setmeal/findById.do?id="+row.id).then((res)=>{
+                        this.formData = res.data.data;
+                        console.log(res.data.data.img+"=========");
+                        this.imageUrl = this.qiniu_domain_url + res.data.data.img+"_itcast";
+                        //3.2 回显所有的检查组数据
+                        axios.get(this.backend_url+"/setmeal/findAll.do").then((res)=>{
+                            this.tableData = res.data.data;
+                            //3.3 回显检查组所关联的检查项
+                            axios.get(this.backend_url +"/setmeal/findCheckGroupsById.do?id="+row.id).then((res)=>{
+                                this.checkgroupIds = res.data.data;
+
+
+                            }).catch((err)=>{
+                                console.log(err);
+                            });
+                        }).catch((err)=>{
+                            console.log(err);
+                        });
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
+                },
+                handleEdit() {
+                    axios.post(this.backend_url+ "/setmeal/edit.do?checkgroupIds="+this.checkgroupIds, this.formData).then((res)=>{
+                        this.$message({
+                            message: res.data.message,
+                            type: res.data.flag ? "success": "error"
+                        });
+                        this.dialogFormVisible4Edit = false;
+                        this.findPage();
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
+                },*/
             }
         })
     </script>

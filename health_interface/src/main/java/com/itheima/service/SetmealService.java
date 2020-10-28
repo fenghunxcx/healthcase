@@ -29,4 +29,7 @@ public interface SetmealService {
     Setmeal findById(Integer id);
 
     List<Map<String,Object>> findSetmealCount();
+
+   // void edit(Setmeal setmeal, Integer[] checkgroupIds);
+
 }

@@ -28,4 +28,9 @@ public interface SetmealDao {
     List<Map<String,Object>> findSetmealCount();
 
     List<Map<String,Object>> getHotSetmeal();
+
+    /*void updateSetmeal(Setmeal setmeal);
+
+    void delRelation(@Param("id") Integer id);*/
+
 }

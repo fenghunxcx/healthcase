@@ -25,6 +25,7 @@ import java.util.Map;
  */
 @Service
 public class SetmealServiceImpl implements SetmealService {
+    private static String img = null;
     private final String REDIS_SETMEAL = "Setmeal";
     @Autowired
     SetmealDao setmealDao;
@@ -105,11 +106,28 @@ public class SetmealServiceImpl implements SetmealService {
         return setmealDao.findById(id);
     }
 
+    /*@Override
+    public void edit(Setmeal setmeal, Integer[] checkgroupIds) {
+        setmealDao.updateSetmeal(setmeal);
+        // 删除该检查组原来的关系
+        setmealDao.delRelation(setmeal.getId());
+        setRelation(setmeal,checkgroupIds);
+
+        addImg2Redis(img);
+        //删除点击确定后redis中的图片名字
+
+        Jedis jedis = jedisPool.getResource();
+
+        jedis.srem(RedisConst.SETMEAL_PIC_RESOURCES, setmeal.getImg());
+
+    }*/
 
     @Override
     public List<Map<String, Object>> findSetmealCount() {
         return setmealDao.findSetmealCount();
     }
+
+
 
     private void addJedis(List<Setmeal> setmeal) {
         Jedis jedis = jedisPool.getResource();
@@ -120,4 +138,9 @@ public class SetmealServiceImpl implements SetmealService {
         Jedis jedis = jedisPool.getResource();
         jedis.srem(REDIS_SETMEAL);
     }
+    /*private void addImg2Redis(String imgName) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd(RedisConst.SETMEAL_PIC_RESOURCES, imgName);
+    }*/
+
 }
