@@ -9,5 +9,5 @@ public interface MenuDao {
 
     List<Menu> findLevelMenu(@Param("username") String username, @Param("level") Integer level);
 
-    List<Menu> findsecondaryMenu(Integer id);
+    List<Menu> findsecondaryMenu(@Param("username") String username, @Param("level") Integer level, @Param("id") Integer id);
 }

@@ -28,7 +28,7 @@ public class MenuServiceImpl implements MenuService {
             primaryMap.put("path", menu.getPath());
             primaryMap.put("title", menu.getName());
             primaryMap.put("icon", menu.getIcon());
-            List<Menu> menus1 = menuDao.findsecondaryMenu(menu.getId());
+            List<Menu> menus1 = menuDao.findsecondaryMenu(username, 2, menu.getId());
             List<Map<String, Object>> children = new ArrayList<>();
             for (Menu child : menus1) {
                 Map<String, Object> SecondaryMap = new HashMap<>();
