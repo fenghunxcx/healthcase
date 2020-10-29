@@ -14,9 +14,18 @@ public class Menu implements Serializable{
     private Integer priority; // 优先级（用于排序）
     private String description; // 描述
     private String icon;//图标
+    private String level;//目录等级
     private Set<Role> roles = new HashSet<Role>(0);//角色集合
     private List<Menu> children = new ArrayList<>();//子菜单集合
     private Integer parentMenuId;//父菜单id
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     public Integer getId() {
         return id;
@@ -96,5 +105,22 @@ public class Menu implements Serializable{
 
     public void setParentMenuId(Integer parentMenuId) {
         this.parentMenuId = parentMenuId;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", linkUrl='" + linkUrl + '\'' +
+                ", path='" + path + '\'' +
+                ", priority=" + priority +
+                ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                ", level='" + level + '\'' +
+                ", roles=" + roles +
+                ", children=" + children +
+                ", parentMenuId=" + parentMenuId +
+                '}';
     }
 }

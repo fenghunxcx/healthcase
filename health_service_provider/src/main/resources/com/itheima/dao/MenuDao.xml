@@ -45,4 +45,55 @@
             </if>
         </where>
     </select>
+
+    <select id="findPage" resultType="Menu" >
+        select * from t_menu
+        <include refid="base"/>
+    </select>
+
+    <sql id="base">
+        <where>
+            <if test="s!=null and s.length>0">
+                level like "%"#{s}"%" or  name like "%"#{s}"%"
+            </if>
+        </where>
+    </sql>
+
+    <select id="findName" resultType="Map">
+        select priority value , name label from t_menu where level=1
+    </select>
+
+    <select id="selectParentsCounts" resultType="int">
+        select count(0) from t_menu where level = #{l};
+    </select>
+    <select id="selectParentsId" resultType="int">
+        select id from t_menu where level=#{l} and priority =#{p}
+    </select>
+
+    <select id="selectChirdCounts" resultType="int">
+        select COUNT(0) from t_menu where parentMenuId =#{id}
+    </select>
+    <insert id="addALL">
+        INSERT INTO `t_menu`(`id`, `name`, `linkUrl`, `path`, `priority`, `icon`, `description`, `parentMenuId`, `level`) VALUES (null , #{name}, #{linkUrl}, #{path}, #{priority},#{icon}, #{description}, #{parentMenuId}, #{level});
+    </insert>
+
+    <select id="findById" resultType="Menu">
+        select * from t_menu where id = #{id}
+    </select>
+
+    <update id="edit">
+        UPDATE `t_menu` SET `name` = #{name}, `linkUrl` = #{linkUrl}, `path` = #{path}, `priority` = #{priority}, `icon` = #{icon}, `description` = #{description}, `parentMenuId` = #{parentMenuId}, `level` = #{level} WHERE `id` = #{id};
+    </update>
+
+    <delete id="delById">
+        delete from t_menu where id=#{id}
+    </delete>
+
+    <select id="selectById" resultType="String">
+        select level from t_menu where id=#{id}
+    </select>
+
+    <select id="selectPriorityById" resultType="int">
+        select priority from t_menu where id = #{id}
+    </select>
 </mapper>
