@@ -8,7 +8,7 @@
        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
     <!--dubbo配置-->
     <dubbo:application name="dubbo-oms-consumer"/>
-    <dubbo:registry address="zookeeper://192.168.142.128:2181"/>
+    <dubbo:registry address="zookeeper://139.196.12.248:2181"/>
     <dubbo:annotation package="com.itheima"/>
 
     <!--启动时不检查: 建议的开发阶段开启， 在生产环境下关闭-->
