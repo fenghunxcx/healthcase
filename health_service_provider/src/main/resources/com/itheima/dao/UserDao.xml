@@ -44,7 +44,7 @@
     <select id="findById" resultMap="findUserMap">
          select * from t_user where id =  #{id}
     </select>
-    <select id="findPage" resultType="Sysuser">
+    <select id="findPage" resultMap="findUserMap">
         select * from t_user
         <where>
             <if test="value != null and value.length > 0">

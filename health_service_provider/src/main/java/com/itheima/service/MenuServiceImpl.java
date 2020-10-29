@@ -62,6 +62,10 @@ public class MenuServiceImpl implements MenuService {
     public PageResult findPage(QueryPageBean queryPageBean) {
         PageHelper.startPage(queryPageBean.getCurrentPage(),queryPageBean.getPageSize());
         Page<Menu> page = menuDao.findPage(queryPageBean.getQueryString());
+        for (Menu menu : page) {
+            Integer pId = menu.getParentMenuId();
+            menu.setParentsName(menuDao.selectParentsName(pId));
+        }
         return new PageResult(page.getTotal(),page);
     }
 
@@ -81,8 +85,8 @@ public class MenuServiceImpl implements MenuService {
     public void edit(Menu menu) {
         Menu handleMenu=null;
         Integer id = menu.getId();
-        String level = menuDao.selectById(id);//1
-        Integer priority  = menuDao.selectPriorityById(id);//1
+        String level = menuDao.selectById(id);
+        Integer priority  = menuDao.selectPriorityById(id);
         if (level.equals("1")){
             if (menu.getPriority()!=priority ){
                 throw new BusinessRuntimeException("一级目录不允许变为二级目录或者其他一级目录");
@@ -103,6 +107,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void delById(Integer id) {
+        String level = menuDao.selectById(id);
+        if (level.equals("1")){
+            throw  new BusinessRuntimeException("不允许删除父级菜单");
+        }
         menuDao.delById(id);
     }
 

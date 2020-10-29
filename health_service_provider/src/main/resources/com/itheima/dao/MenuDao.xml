@@ -37,14 +37,6 @@
     <select id="findByParentMenuId" resultType="Menu">
  SELECT * FROM t_menu WHERE parentMenuId = #{parentMenuId} AND LEVEL = 2
     </select>
-    <select id="findPage" resultType="menu">
-        select * from t_menu
-        <where>
-            <if test="value != null and value.length > 0">
-                name like "%"#{value}"%"
-            </if>
-        </where>
-    </select>
 
     <select id="findPage" resultType="Menu" >
         select * from t_menu
@@ -95,5 +87,9 @@
 
     <select id="selectPriorityById" resultType="int">
         select priority from t_menu where id = #{id}
+    </select>
+
+    <select id="selectParentsName" resultType="String">
+        select name from t_menu where id = #{id}
     </select>
 </mapper>

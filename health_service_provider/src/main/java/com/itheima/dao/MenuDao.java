@@ -37,4 +37,6 @@ public interface MenuDao {
     String selectById(@Param("id") Integer id);
 
     Integer selectPriorityById(@Param("id") Integer id);
+
+    String selectParentsName(@Param("id") Integer pId);
 }

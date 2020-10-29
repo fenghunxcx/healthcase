@@ -15,9 +15,18 @@ public class Menu implements Serializable{
     private String description; // 描述
     private String icon;//图标
     private String level;//目录等级
+    private String  parentsName;//目录父类名称
     private Set<Role> roles = new HashSet<Role>(0);//角色集合
     private List<Menu> children = new ArrayList<>();//子菜单集合
     private Integer parentMenuId;//父菜单id
+
+    public String getParentsName() {
+        return parentsName;
+    }
+
+    public void setParentsName(String parentsName) {
+        this.parentsName = parentsName;
+    }
 
     public String getLevel() {
         return level;
