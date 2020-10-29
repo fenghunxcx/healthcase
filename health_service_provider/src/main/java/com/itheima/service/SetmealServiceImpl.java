@@ -7,6 +7,7 @@ import com.itheima.constant.RedisConst;
 import com.itheima.dao.SetmealDao;
 import com.itheima.entity.PageResult;
 import com.itheima.entity.QueryPageBean;
+import com.itheima.exception.BusinessRuntimeException;
 import com.itheima.pojo.Setmeal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,5 +80,31 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public List<Map<String, Object>> findSetmealCount() {
         return setmealDao.findSetmealCount();
+    }
+
+    @Override
+    public void edit(Setmeal setmeal, Integer[] checkgroupIds) {
+        setmealDao.edit(setmeal);
+        Integer setmealId = setmeal.getId();
+        if(setmealId != null){
+            setmealDao.delRelation(setmealId);
+            setRelation(setmeal, checkgroupIds);
+            jedisPool.getResource().srem(RedisConst.SETMEAL_PIC_RESOURCES, setmeal.getImg());
+        }
+    }
+
+    @Override
+    public void delById(Integer id) {
+        int row = setmealDao.findOrderById(id);
+        if(row > 0){
+            throw new BusinessRuntimeException("删除失败,此套餐与订单关联");
+        }
+        setmealDao.delRelation(id);
+        setmealDao.delById(id);
+    }
+
+    @Override
+    public List<Integer> findCheckGroupIdsById(Integer id) {
+        return setmealDao.findCheckGroupIdsById(id);
     }
 }

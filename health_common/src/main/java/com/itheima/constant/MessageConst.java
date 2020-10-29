@@ -3,6 +3,8 @@ package com.itheima.constant;
 public class MessageConst {
   public static final String ACTION_SUCCESS = "操作成功";
   public static final String ACTION_FAIL = "操作失败";
+  public static final String EDIT_SETMEAL_SUCCESS = "编辑套餐成功";
+  public static final String DELETE_SETMEAL_SUCCESS = "删除套餐成功";
   public static final String DELETE_CHECKITEM_FAIL = "删除检查项失败";
   public static final String DELETE_CHECKITEM_SUCCESS = "删除检查项成功";
   public static final String ADD_CHECKITEM_SUCCESS = "新增检查项成功";

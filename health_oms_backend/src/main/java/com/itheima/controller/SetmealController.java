@@ -11,12 +11,14 @@ import com.itheima.service.SetmealService;
 import com.qiniu.util.Auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 黑马程序员
@@ -35,9 +37,9 @@ public class SetmealController {
     @RequestMapping("/getToken")
     public Result getToken(){
         log.debug("获取token");
-        String accessKey = "6LLhkymg55mZ2RiAMdloHAr-nYbhYgY2eAI2yOWb";
-        String secretKey = "ZaqnW4nGn930xrYmMUYD-4-f02MSZK2kmAL-eJEa";
-        String bucket = "hm-31";
+        String accessKey = "xweTHqDGlgfFUHj9LvQX_CFlcPPn_W7LVvBG-FkL";
+        String secretKey = "1HJDNbeiJL7HViyfQGYOUCgw8oOgkQ-jEKmVvfaf";
+        String bucket = "uploadserver";
         Auth auth = Auth.create(accessKey, secretKey);
         String uploadToken = auth.uploadToken(bucket);
         log.debug("获取token成功：" + uploadToken);
@@ -75,5 +77,33 @@ public class SetmealController {
         jedisPool.getResource().sadd(RedisConst.SETMEAL_PIC_RESOURCES, imgName);
         log.debug("图片名称添加到redis成功！！");
         return new Result(true,MessageConst.ADD_IMGNAME_REDIS);
+    }
+
+    @RequestMapping("/edit")
+    @PreAuthorize("hasAuthority('SETMEAL_EDIT')")
+    public Result edit(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
+        setmealService.edit(setmeal, checkgroupIds);
+        return new Result(true, MessageConst.EDIT_SETMEAL_SUCCESS);
+    }
+
+    @RequestMapping("/delById")
+    @PreAuthorize("hasAuthority('SETMEAL_DELETE')")
+    public Result delById(Integer id){
+        setmealService.delById(id);
+        return new Result(true, MessageConst.DELETE_SETMEAL_SUCCESS);
+    }
+
+    @RequestMapping("/findById")
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
+    public Result findById(Integer id){
+        Setmeal setmeal = setmealService.findById(id);
+        return new Result(true, MessageConst.QUERY_SETMEAL_SUCCESS, setmeal);
+    }
+
+    @RequestMapping("/findCheckGroupIdsById")
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
+    public Result findCheckGroupIdsById(Integer id){
+        List<Integer> checkGroupIdsByIds = setmealService.findCheckGroupIdsById(id);
+        return new Result(true, MessageConst.QUERY_CHECKGROUP_SUCCESS, checkGroupIdsByIds);
     }
 }

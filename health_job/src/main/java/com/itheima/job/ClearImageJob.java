@@ -38,7 +38,7 @@ public class ClearImageJob {
 	public void clearImageJob(){
 		//获取所有的图片名称
 		Set<String> imgNames  = jedisPool.getResource().smembers(RedisConst.SETMEAL_PIC_RESOURCES);
-		//获取昨天的日期字符串
+		/*//获取昨天的日期字符串
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, -1);
 		Date yesterday = cal.getTime();
@@ -53,6 +53,16 @@ public class ClearImageJob {
 				//删除redis中的图片名称
 				jedisPool.getResource().srem(RedisConst.SETMEAL_PIC_RESOURCES, imgName);
 				log.debug("删除了" + imgName + "图片!!");
+			}
+		}*/
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String str = sdf.format(new Date());
+
+		for (String imgName : imgNames) {
+			if(imgName != null && !imgName.startsWith(str)){
+				delQiniu(imgName);
+				jedisPool.getResource().srem(RedisConst.SETMEAL_PIC_RESOURCES, imgName);
+				System.out.println("删除了" + imgName + "图片!!");
 			}
 		}
 	}
