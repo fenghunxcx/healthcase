@@ -34,4 +34,22 @@
     <select id="findCountByAfterDate" parameterType="String" resultType="long">
         select count(0) from t_member where regTime &gt;= #{date}
     </select>
+
+    <select id="getSex" parameterType="string" resultType="int">
+        SELECT COUNT(0) FROM t_member WHERE sex = #{value}
+    </select>
+
+    <select id="getAge" resultType="map">
+    SELECT (CASE
+    WHEN a.age IS NULL THEN 'unknown'
+    WHEN a.age &lt;18 THEN '0-18岁'
+    WHEN a.age BETWEEN 18 AND 30 THEN '18-30岁'
+    WHEN a.age BETWEEN 31 AND 45 THEN '30-45岁'
+    WHEN a.age > 45 THEN '45岁以上'
+    END) as name,
+    COUNT(*) 'value'
+    FROM (SELECT NOW() AS "时间",birthday,TIMESTAMPDIFF(YEAR, birthday, CURDATE()) AS age FROM t_member  )a
+    GROUP BY name
+</select>
+
 </mapper>
