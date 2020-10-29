@@ -86,11 +86,13 @@
         select
         count(o.id) setmeal_count,
         s.name name ,
-        count(o.id)/ (select count(0) from t_order)  proportion
+        count(o.id)/(select count(0) from t_order)  proportion
         from t_setmeal s left join t_order o
         on o.setmeal_id = s.id
         group by  s.id
         order by  count(o.id) desc
         limit 3
     </select>
+
+
 </mapper>
