@@ -15,7 +15,7 @@ public interface UserDao {
 	 */
 	SysUser findByUsername(String username);
 
-	Page<SysUser> findPage();
+	Page<SysUser> findPage(String queryString);
 
 	void add(SysUser sysUser);
 	@Insert("INSERT INTO `itcast_health`.`t_user_role` \n" +

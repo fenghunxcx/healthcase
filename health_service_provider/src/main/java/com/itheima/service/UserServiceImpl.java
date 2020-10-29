@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public PageResult findPage(QueryPageBean queryPageBean) {
 		PageHelper.startPage(queryPageBean.getCurrentPage(),queryPageBean.getPageSize());
-		Page<SysUser> sysUsers = userDao.findPage();
+		Page<SysUser> sysUsers = userDao.findPage(queryPageBean.getQueryString());
 		return new PageResult(sysUsers.getTotal(),sysUsers);
 	}
 

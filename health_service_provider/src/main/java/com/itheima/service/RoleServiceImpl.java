@@ -32,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public PageResult findPage(QueryPageBean queryPageBean) {
         PageHelper.startPage(queryPageBean.getCurrentPage(),queryPageBean.getPageSize());
-        Page<Role> roles = roleDao.findPage();
+        Page<Role> roles = roleDao.findPage(queryPageBean.getQueryString());
         return new PageResult(roles.getTotal(),roles);
     }
 

@@ -18,8 +18,8 @@ public interface RoleDao {
 
     @Select("select * from t_role")
     List<Role> findRolesAll();
-    @Select("select * from t_role ")
-    Page<Role> findPage();
+
+    Page<Role> findPage(String queryString);
     void add(Role role);
     @Insert("INSERT INTO `itcast_health`.`t_role_permission` \n" +
             "\t(`role_id`, \n" +
