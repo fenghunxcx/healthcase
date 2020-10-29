@@ -7,6 +7,8 @@
 
     <context:component-scan base-package="com.itheima"></context:component-scan>
     <bean id="job" class="com.itheima.job.ClearImageJob"></bean>
+    <!-- 新增实例 -->
+    <bean id="ClearOrderSettingJob" class="com.itheima.job.ClearOrderSettingJob"></bean>
 
     <!--创建任务详情-->
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -19,11 +21,27 @@
         <property name="jobDetail" ref="jobDetail"></property>
         <property name="cronExpression" value="0/10 * * * * ?"></property>
     </bean>
+
+    <!-- 新增任务 -->
+    <bean id="ClearOrderSettingJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="ClearOrderSettingJob"></property>
+        <property name="targetMethod" value="ClearOrderSettingJob"></property>
+    </bean>
+    <bean id="ClearOrderSettingJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="ClearOrderSettingJobDetail"></property>
+        <!-- 4.1设置定时执行时间每月最后一天凌晨两点 -->
+        <!-- <property name="cronExpression" value="* * 2 L * ?"></property> -->
+        <!-- 4.2测试使用corn表达式 -->
+        <property name="cronExpression" value="0/10 * * * * ?"></property>
+    </bean>
+
     <!--创建调度中心-->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <array>
                 <ref bean="jobTrigger"></ref>
+                <ref bean="ClearOrderSettingJobTrigger"></ref>
             </array>
         </property>
     </bean>

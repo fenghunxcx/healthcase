@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -73,4 +74,27 @@ public class OrderSettingServiceImpl implements OrderSettingService {
         return orderSettingDao.findByMonth(thisMonthFirstDay,thisMonthLastDay );
 
     }
+
+    @Override
+    public void ClearOrderSetting() {
+        // 1.获取当前日期并转为字符串
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH,-1);
+        Date beforeMonthTime = cal.getTime();
+
+        // 2.获得距离当前一个月的日期
+        cal.add(Calendar.MONTH,-2);
+        Date lastMonthTime = cal.getTime();
+
+        // 3.将日期转为字符串
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String beforeMonth = sdf.format(beforeMonthTime);
+        String lastMonth = sdf.format(lastMonthTime);
+
+        // 5.调用Dao层删除指定日期间的数据表中数据
+        orderSettingDao.clearBetweenOrderDate(beforeMonth,lastMonth);
+        System.out.println("成功删除数据");
+    }
+
+
 }

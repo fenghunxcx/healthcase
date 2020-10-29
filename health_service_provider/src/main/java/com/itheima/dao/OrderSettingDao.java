@@ -20,4 +20,6 @@ public interface OrderSettingDao {
     List<OrderSetting> findByMonth(String thisMonthFirstDay, String thisMonthLastDay);
 
     void editReservationsByOrderDate(OrderSetting orderSetting);
+
+    void clearBetweenOrderDate(String beforeMonth, String lastMonth);
 }
