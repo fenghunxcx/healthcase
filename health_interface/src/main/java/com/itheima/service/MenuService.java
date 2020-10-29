@@ -18,4 +18,10 @@ public interface MenuService {
     PageResult findPage(QueryPageBean queryPageBean);
 
     void add(Menu menu);
+
+    Menu findById(Integer id);
+
+    void edit(Menu menu);
+
+    void delById(Integer id);
 }

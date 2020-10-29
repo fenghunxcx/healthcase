@@ -58,4 +58,22 @@ public class MenuController {
 
         return new Result(true,"菜单信息添加成功");
     }
+
+    @RequestMapping("/findById")
+    public Result findById(Integer id ){
+        Menu menus = menuService.findById(id);
+        return new Result(true,"回显菜单成功",menus);
+    }
+    @RequestMapping("/edit")
+    public Result edit(@RequestBody Menu menu){
+        System.out.println("menu = " + menu);
+        menuService.edit(menu);
+        return new Result(true,"更新成功");
+    }
+
+    @RequestMapping("/delById")
+    public Result delById(Integer id){
+        menuService.delById(id);
+        return new Result(true,"删除成功");
+    }
 }

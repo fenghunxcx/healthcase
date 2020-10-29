@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.itheima.dao.MenuDao;
 import com.itheima.entity.PageResult;
 import com.itheima.entity.QueryPageBean;
+import com.itheima.exception.BusinessRuntimeException;
 import com.itheima.pojo.Menu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,50 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void add(Menu menu) {
+        Menu addMenu = handle(menu);
+        menuDao.addALL(addMenu);
+    }
+
+    @Override
+    public Menu findById(Integer id) {
+
+        return menuDao.findById(id);
+    }
+
+    @Override
+    public void edit(Menu menu) {
+        Menu handleMenu=null;
+        Integer id = menu.getId();
+        String level = menuDao.selectById(id);//1
+        Integer priority  = menuDao.selectPriorityById(id);//1
+        if (level.equals("1")){
+            if (menu.getPriority()!=priority ){
+                throw new BusinessRuntimeException("一级目录不允许变为二级目录或者其他一级目录");
+            }
+            else if (menu.getPriority()==priority){
+                menu.setPath(String.valueOf(menu.getPriority()+1));
+                menu.setLevel("1");
+                handleMenu=menu;
+            }
+
+        }
+        else if (level.equals("2")){
+            handleMenu = handle(menu);
+        }
+
+        menuDao.edit(handleMenu);
+    }
+
+    @Override
+    public void delById(Integer id) {
+        menuDao.delById(id);
+    }
+
+    public Menu handle(Menu menu){
+
+
         Integer priority = menu.getPriority();
-        if (priority==-1||priority==null){
+        if (priority==-1){
             Integer counts = menuDao.selectParentsCounts(1);
             counts+=1;
             menu.setPriority(counts);
@@ -80,7 +123,6 @@ public class MenuServiceImpl implements MenuService {
             menu.setPath("/"+path1+"-"+path2);
             menu.setParentMenuId(parentsId);
         }
-
-            menuDao.addALL(menu);
+        return menu;
     }
 }

@@ -45,4 +45,24 @@
     <insert id="addALL">
         INSERT INTO `t_menu`(`id`, `name`, `linkUrl`, `path`, `priority`, `icon`, `description`, `parentMenuId`, `level`) VALUES (null , #{name}, #{linkUrl}, #{path}, #{priority},#{icon}, #{description}, #{parentMenuId}, #{level});
     </insert>
+
+    <select id="findById" resultType="Menu">
+        select * from t_menu where id = #{id}
+    </select>
+
+    <update id="edit">
+        UPDATE `t_menu` SET `name` = #{name}, `linkUrl` = #{linkUrl}, `path` = #{path}, `priority` = #{priority}, `icon` = #{icon}, `description` = #{description}, `parentMenuId` = #{parentMenuId}, `level` = #{level} WHERE `id` = #{id};
+    </update>
+
+    <delete id="delById">
+        delete from t_menu where id=#{id}
+    </delete>
+
+    <select id="selectById" resultType="String">
+        select level from t_menu where id=#{id}
+    </select>
+
+    <select id="selectPriorityById" resultType="int">
+        select priority from t_menu where id = #{id}
+    </select>
 </mapper>

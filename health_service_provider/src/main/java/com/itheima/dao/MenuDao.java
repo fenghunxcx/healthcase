@@ -24,4 +24,14 @@ public interface MenuDao {
     Integer selectChirdCounts(@Param("id") Integer parentsId);
 
     void addALL(Menu menu);
+
+    Menu findById(@Param("id") Integer id);
+
+    void edit(Menu handleMenu);
+
+    void delById(@Param("id") Integer id);
+
+    String selectById(@Param("id") Integer id);
+
+    Integer selectPriorityById(@Param("id") Integer id);
 }
