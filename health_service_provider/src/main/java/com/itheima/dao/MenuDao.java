@@ -5,6 +5,7 @@ import com.itheima.pojo.Menu;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MenuDao {
 
@@ -13,4 +14,14 @@ public interface MenuDao {
     List<Menu> findsecondaryMenu(Integer id);
 
     Page<Menu> findPage(@Param("s") String queryString);
+
+    List<Map<String, String>> findName();
+
+    Integer selectParentsCounts(@Param("l") Integer level );
+
+    Integer selectParentsId(@Param("l") Integer level, @Param("p") Integer priority);
+
+    Integer selectChirdCounts(@Param("id") Integer parentsId);
+
+    void addALL(Menu menu);
 }

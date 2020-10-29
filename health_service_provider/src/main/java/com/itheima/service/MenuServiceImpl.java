@@ -23,6 +23,11 @@ public class MenuServiceImpl implements MenuService {
     private MenuDao menuDao;
 
     @Override
+    public List<Map<String, String>> findName() {
+        return menuDao.findName();
+    }
+
+    @Override
     public List<Map<String, Object>> findMenu(String username) {
         List<Menu> menus = menuDao.findLevelMenu(username, 1);
         List<Map<String, Object>> list = new ArrayList<>();
@@ -53,5 +58,29 @@ public class MenuServiceImpl implements MenuService {
         PageHelper.startPage(queryPageBean.getCurrentPage(),queryPageBean.getPageSize());
         Page<Menu> page = menuDao.findPage(queryPageBean.getQueryString());
         return new PageResult(page.getTotal(),page);
+    }
+
+    @Override
+    public void add(Menu menu) {
+        Integer priority = menu.getPriority();
+        if (priority==-1||priority==null){
+            Integer counts = menuDao.selectParentsCounts(1);
+            counts+=1;
+            menu.setPriority(counts);
+            menu.setLevel("1");
+            menu.setPath(String.valueOf(counts+1));
+
+        }
+        else {
+            menu.setLevel("2");
+            Integer parentsId = menuDao.selectParentsId(1,priority);
+            Integer counts = menuDao.selectChirdCounts(parentsId);
+            Integer path1=priority+1;
+            Integer path2 =counts+1;
+            menu.setPath("/"+path1+"-"+path2);
+            menu.setParentMenuId(parentsId);
+        }
+
+            menuDao.addALL(menu);
     }
 }
