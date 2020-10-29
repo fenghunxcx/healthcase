@@ -86,4 +86,64 @@ public class MemberServiceImpl implements MemberService {
         }
         return months;
     }
-}
+
+    @Override
+    public Map<String, Object> getCountByMemberSex() {
+        String man= "男性会员";
+        String woman= "女性会员";
+
+        //创建一个map
+        HashMap<String, Object> resultMap = new HashMap<>();
+        //从数据库获取性别是1还是2
+        Integer ManCount = memberDao.getSex("1");
+        Integer WomanCount = memberDao.getSex("2");
+
+        //new一个List集合里面参数 将男性会员的个数 和女性会员的个数传递进去
+        ArrayList<Map<String,Object>> memberCount= new ArrayList<>();
+
+        HashMap<String, Object> manMap = new HashMap<>();
+        manMap.put("value",ManCount);
+        manMap.put("name",man);
+
+        HashMap<String,Object>womanMap =new HashMap<>();
+        womanMap.put("value",WomanCount);
+        womanMap.put("name",woman);
+        //将获取到的男女性个数存到ArrayList集合
+        memberCount.add(manMap);
+        memberCount.add(womanMap);
+        ArrayList<String>sexs =new ArrayList<>();
+        sexs.add(man);
+        sexs.add(woman);
+        //
+        resultMap.put("memberSex",sexs);
+        resultMap.put("memberCount",memberCount);
+
+        return resultMap;
+    }
+    //年龄
+    @Override
+    public Map<String, Object> getCountByMemberAge() {
+
+        //要返回前端的数据
+        List<Map<String, Object>> AgeCount = memberDao.getAge();
+//       创建集合用来接收name
+        ArrayList<String> AgeName = new ArrayList<>();
+        //遍历获取到的数据存入map中
+        for (Map<String, Object> map : AgeCount) {
+            //遍历循环获取到map中的name值
+            String name = (String) map.get("name");
+            //将map中获取到的name存入map中
+            AgeName.add(name);
+        }
+        //新建一个hashMap
+        Map<String, Object> hashMap = new HashMap<>();
+        //将获取到的map中的name和value存到map中
+        hashMap.put("AgeName", AgeName);
+        hashMap.put("AgeCount", AgeCount);
+        //判断下map中的字符串是否为空
+        if (hashMap.isEmpty()) {
+            return hashMap;
+        }
+        return hashMap;
+    }
+    }
