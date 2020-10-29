@@ -24,6 +24,55 @@
     </resultMap>
 
     <select id="findByUsername" resultMap="findByUsernameMap" parameterType="string">
+
+
         select * from t_user where username = #{username}
     </select>
+
+
+    <resultMap id="findUserMap" type="SysUser">
+        <id column="id" property="id"/>
+        <result column="birthday" property="birthday"/>
+        <result column="gender" property="gender"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="remark" property="remark"/>
+        <result column="station" property="station"/>
+        <result column="telephone" property="telephone"/>
+        <collection property="roles" column="id" ofType="role" select="com.itheima.dao.RoleDao.findByUserId"/>
+    </resultMap>
+    <select id="findById" resultMap="findUserMap">
+         select * from t_user where id =  #{id}
+    </select>
+    <select id="findPage" resultMap="findUserMap">
+        select * from t_user
+        <where>
+            <if test="value != null and value.length > 0">
+                name like "%"#{value}"%"
+            </if>
+        </where>
+    </select>
+    <insert id="add" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `itcast_health`.`t_user`
+	(
+	`birthday`,
+	`gender`,
+	`username`,
+	`password`,
+	`remark`,
+	`station`,
+	`telephone`
+	)
+	VALUES
+	(
+	#{birthday},
+	#{gender},
+	#{username},
+	#{password},
+	#{remark},
+	#{station},
+	#{telephone}
+	);
+    </insert>
+
 </mapper>

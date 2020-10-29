@@ -3,6 +3,7 @@ package com.itheima.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConst;
 import com.itheima.entity.Result;
+import com.itheima.pojo.Menu;
 import com.itheima.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,17 @@ public class MenuController {
 
     @Autowired
     private UserController userController;
-
     @RequestMapping("/findMenu")
     public Result findMenu(HttpSession session){
         Result result = userController.getUsername(session);
         List<Map<String, Object>> menu = menuService.findMenu(String.valueOf(result.getData()));
         return new Result(true, MessageConst.GET_MENU_SUCCESS, menu);
     }
+
+    @RequestMapping("/findAll")
+    public Result findAll() {
+        List<Menu> menus = menuService.findAll();
+        return new Result(true,"菜单权限查询成功",menus);
+    }
+
 }

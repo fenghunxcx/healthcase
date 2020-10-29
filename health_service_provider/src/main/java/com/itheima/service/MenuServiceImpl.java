@@ -17,6 +17,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuDao menuDao;
+    @Override
+    public List<Menu> findAll() {
+        return menuDao.findAll();
+    }
 
     @Override
     public List<Map<String, Object>> findMenu(String username) {

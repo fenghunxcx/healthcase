@@ -1,7 +1,9 @@
 package com.itheima.dao;
 
 import com.itheima.pojo.Permission;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,4 +13,6 @@ import java.util.Set;
  */
 public interface PermissionDao {
     Set<Permission> findPermissionsByRoleId(Integer roleId);
+    @Select("select * from t_permission")
+    List<Permission> findAll();
 }

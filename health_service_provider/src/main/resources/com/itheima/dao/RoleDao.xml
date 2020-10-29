@@ -10,7 +10,6 @@
         <result column="keyword" property="keyword"></result>
         <result column="description" property="description"></result>
     </resultMap>
-
     <resultMap id="findRolesByUserIdMap" type="role" extends="baseMap">
         <collection
                 property="permissions"
@@ -22,10 +21,35 @@
             Set<Permission> com.itheima.dao.PermissionDao.findPermissionsByRoleId(Integer roleId);
         -->
     </resultMap>
-
-
     <select id="findRolesByUserId" resultMap="findRolesByUserIdMap" parameterType="int">
       select * from t_role where id in
           (select role_id from t_user_role where user_id = #{userId})
     </select>
+
+    <resultMap id="findByUserIdMap" type="role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="keyword" property="keyword"/>
+        <result column="description" property="description"/>
+        <collection property="permissions" column="id" ofType="Permission" select="com.itheima.dao.PermissionDao.findByRoleId"/>
+        <collection property="menus" column="id" ofType="Menu" select="com.itheima.dao.MenuDao.findByRoleId"/>
+    </resultMap>
+    <select id="findByUserId" resultMap="findByUserIdMap">
+        SELECT * FROM t_user_role u, t_role r WHERE u.role_id = r.id AND u.user_id = #{userId}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    INSERT INTO `itcast_health`.`t_role`
+	(
+	`name`,
+	`keyword`,
+	`description`
+	)
+	VALUES
+	(
+	#{name},
+	#{keyword},
+	#{description}
+	);
+
+</insert>
 </mapper>
