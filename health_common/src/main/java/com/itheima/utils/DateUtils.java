@@ -111,7 +111,7 @@ public class DateUtils {
     }
 
     public static Date parseString3Date(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         try {
             Date date = sdf.parse(dateStr);
             return date;

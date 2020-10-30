@@ -31,7 +31,7 @@
     </mvc:annotation-driven>
     <!--dubbo配置-->
     <dubbo:application name="dubbo-oms-consumer"/>
-    <dubbo:registry address="zookeeper://139.196.12.248:2181"/>
+    <dubbo:registry address="zookeeper://192.168.232.129:2181"/>
     <dubbo:annotation package="com.itheima.controller"/>
     <dubbo:consumer check="false" ></dubbo:consumer>
 </beans>
