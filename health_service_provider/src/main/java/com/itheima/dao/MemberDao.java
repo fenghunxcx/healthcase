@@ -1,6 +1,7 @@
 package com.itheima.dao;
 
 import com.itheima.pojo.Member;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ public interface MemberDao {
     void add(Member member);
 
     long findCountBeforeByDate(String lastDay);
+    long findBymonths(@Param("startmonth") String startmonth, @Param("endmonth") String endmonth);
 
     /**
      * 查询今日新增会员数
