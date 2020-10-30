@@ -2,7 +2,9 @@ package com.itheima.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.itheima.dao.MemberDao;
+import com.itheima.exception.BusinessRuntimeException;
 import com.itheima.pojo.Member;
+import com.itheima.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -45,6 +47,51 @@ public class MemberServiceImpl implements MemberService {
         map.put("memberCount", memberCount);
         return map;
     }
+
+    @Override
+    public Map findmember(String startmonth, String endmonth) {
+        List<Object> months = new ArrayList<>();
+        List<Long> memberCount = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+        Date startdate = DateUtils.parseString3Date(startmonth);
+        Date endDate = DateUtils.parseString3Date(endmonth);
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        start.setTime(startdate);
+        end.setTime(endDate);
+        start.add(Calendar.MONTH,+1);
+        end.add(Calendar.MONTH,+1);
+        int yearStart = start.get(Calendar.YEAR);
+        int endYear = end.get(Calendar.YEAR);
+        int startMonth = start.get(Calendar.MONTH);
+        int endMonth = end.get(Calendar.MONTH);
+        if (yearStart > endYear) {
+            throw new BusinessRuntimeException("起始日期不能大于结束日期");
+        } else if (yearStart == endYear) {
+            if (startMonth >= endMonth) {
+                throw new BusinessRuntimeException("起始日期不能大于结束日期");
+            }
+        }
+        int month  = (endYear - yearStart) *12;
+        month = month+endMonth-startMonth;
+        for (int i = 0; i < month; i++) {
+            Date time = start.getTime();
+            String monthstr = new SimpleDateFormat("yyyy-MM").format(time);
+            String monthbegin = monthstr+"-01";
+            String monthend = monthstr+"-31";
+            months.add(monthstr);
+            long bymonths = memberDao.findBymonths(monthbegin, monthend);
+            memberCount.add(bymonths);
+            start.add(Calendar.MONTH,+1);
+        }
+        System.out.println(list);
+        Map map = new HashMap();
+        map.put("months",months);
+        map.put("memebercount",memberCount);
+
+        return map;
+    }
+
     /**
      * 根据这个月第一天获取这个月最后一天
      *
@@ -86,4 +133,64 @@ public class MemberServiceImpl implements MemberService {
         }
         return months;
     }
-}
+
+    @Override
+    public Map<String, Object> getCountByMemberSex() {
+        String man= "男性会员";
+        String woman= "女性会员";
+
+        //创建一个map
+        HashMap<String, Object> resultMap = new HashMap<>();
+        //从数据库获取性别是1还是2
+        Integer ManCount = memberDao.getSex("1");
+        Integer WomanCount = memberDao.getSex("2");
+
+        //new一个List集合里面参数 将男性会员的个数 和女性会员的个数传递进去
+        ArrayList<Map<String,Object>> memberCount= new ArrayList<>();
+
+        HashMap<String, Object> manMap = new HashMap<>();
+        manMap.put("value",ManCount);
+        manMap.put("name",man);
+
+        HashMap<String,Object>womanMap =new HashMap<>();
+        womanMap.put("value",WomanCount);
+        womanMap.put("name",woman);
+        //将获取到的男女性个数存到ArrayList集合
+        memberCount.add(manMap);
+        memberCount.add(womanMap);
+        ArrayList<String>sexs =new ArrayList<>();
+        sexs.add(man);
+        sexs.add(woman);
+        //
+        resultMap.put("memberSex",sexs);
+        resultMap.put("memberCount",memberCount);
+
+        return resultMap;
+    }
+    //年龄
+    @Override
+    public Map<String, Object> getCountByMemberAge() {
+
+        //要返回前端的数据
+        List<Map<String, Object>> AgeCount = memberDao.getAge();
+//       创建集合用来接收name
+        ArrayList<String> AgeName = new ArrayList<>();
+        //遍历获取到的数据存入map中
+        for (Map<String, Object> map : AgeCount) {
+            //遍历循环获取到map中的name值
+            String name = (String) map.get("name");
+            //将map中获取到的name存入map中
+            AgeName.add(name);
+        }
+        //新建一个hashMap
+        Map<String, Object> hashMap = new HashMap<>();
+        //将获取到的map中的name和value存到map中
+        hashMap.put("AgeName", AgeName);
+        hashMap.put("AgeCount", AgeCount);
+        //判断下map中的字符串是否为空
+        if (hashMap.isEmpty()) {
+            return hashMap;
+        }
+        return hashMap;
+    }
+    }

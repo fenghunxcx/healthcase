@@ -33,7 +33,7 @@ public interface SetmealDao {
     List<Map<String,Object>> getHotSetmeal();
 
     @Delete("delete from t_setmeal where id = #{id}")
-    void delById(Integer id);
+    long delById(Integer id);
 
     @Select("select count(0) from t_order where setmeal_id = #{id}")
     int findOrderById(Integer id);
@@ -48,7 +48,7 @@ public interface SetmealDao {
             "  remark = #{remark},\n" +
             "  attention = #{attention}\n" +
             "  WHERE (`id`= #{id})")
-    void edit(Setmeal Setmeal);
+    long edit(Setmeal Setmeal);
 
     @Delete("delete from t_setmeal_checkgroup where setmeal_id = #{id}")
     void delRelation(Integer id);

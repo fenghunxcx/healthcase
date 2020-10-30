@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
@@ -51,6 +52,12 @@ public class ReportController {
             e.printStackTrace();
             return new Result(false, MessageConst.GET_MEMBER_NUMBER_REPORT_FAIL );
         }
+    }
+    @RequestMapping("/findBymonths")
+    //接收参数起始月与结束月,通过起始与结束查询数据库
+    public Result findBymonths(@RequestParam("startmonth") String startmonth, @RequestParam("endmonth") String endmonth){
+        Map findmember = memberService.findmember(startmonth, endmonth);
+        return new Result(true,"查询成功",findmember);
     }
 
     @Reference

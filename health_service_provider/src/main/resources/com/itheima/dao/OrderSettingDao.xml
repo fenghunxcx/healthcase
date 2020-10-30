@@ -29,4 +29,8 @@
         update t_ordersetting set reservations = #{reservations} where orderDate = #{orderDate}
     </update>
 
+    <delete id="clearBetweenOrderDate">
+        DELETE FROM t_ordersetting WHERE orderdate BETWEEN #{param2} and #{param1}
+    </delete>
+
 </mapper>

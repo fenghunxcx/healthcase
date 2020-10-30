@@ -1,6 +1,10 @@
 package com.itheima.dao;
 
 import com.itheima.pojo.Member;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 黑马程序员
@@ -13,6 +17,7 @@ public interface MemberDao {
     void add(Member member);
 
     long findCountBeforeByDate(String lastDay);
+    long findBymonths(@Param("startmonth") String startmonth, @Param("endmonth") String endmonth);
 
     /**
      * 查询今日新增会员数
@@ -33,4 +38,9 @@ public interface MemberDao {
      * @return
      */
     long findCountByAfterDate(String date);
+
+    Integer getSex(String s);
+
+
+    List<Map<String, Object>> getAge();
 }

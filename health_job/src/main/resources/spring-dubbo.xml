@@ -12,13 +12,11 @@
     <!--自动扫包-->
     <context:component-scan base-package="com.itheima.service"/>
 
-    <!--配置dubbo 应用名称-->
-    <dubbo:application name="health_provider"/>
-    <!--配置注册中心的得治-->
+    <!--dubbo配置-->
+    <dubbo:application name="dubbo-oms-consumer"/>
     <dubbo:registry address="zookeeper://139.196.12.248:2181"/>
-    <!--dubbo的端口号，默认 208880-->
-    <dubbo:protocol name="dubbo" port="20880"/>
-    <!--配置dubbo自动扫包-->
-    <dubbo:annotation package="com.itheima.service"/>
+    <dubbo:annotation package="com.itheima"/>
 
+    <!--启动时不检查: 建议的开发阶段开启， 在生产环境下关闭-->
+    <dubbo:consumer check="false"></dubbo:consumer>
 </beans>

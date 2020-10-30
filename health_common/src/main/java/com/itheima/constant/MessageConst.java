@@ -67,4 +67,10 @@ public class MessageConst {
   public static final String GET_SETMEAL_LIST_FAIL = "查询套餐列表数据失败";
   public static final String GET_QINIU_TOKEN_SUCCESS = "获取七牛云Token成功！！！";
   public static final String ADD_IMGNAME_REDIS = "在Redis添加图片名称成功！！！";
+
+
+  public static final String GET_AGE_SUCCESSS = "获取年龄成功！！！";
+  public static final String GET_AGE_FAIL = "系统正在维护刷新后重试！！！";
+  public static final String GET__PROPORTION_MEMBERSUCCESSS = "获取男女占比成功！！！";
+  public static final String GET__PROPORTION_MEMBERFAIL = "获取男女占比失败！！！";
 }

@@ -14,4 +14,10 @@ public interface MemberService {
     public Member findByTelephone(String telephone);
 
     Map<String,Object> getMemberReport();
+    Map findmember(String startmonth, String endmonth);
+
+
+    Map<String, Object> getCountByMemberSex();
+
+    Map<String, Object> getCountByMemberAge();
 }
