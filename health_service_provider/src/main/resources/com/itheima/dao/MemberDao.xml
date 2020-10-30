@@ -21,4 +21,7 @@
     <select id="findCountBeforeByDate" parameterType="string" resultType="long">
         select count(0) from t_member where regTime &lt;= #{date}
     </select>
+    <select id="findBymonths" parameterType="string" resultType="long">
+        select count(0) from t_member where regTime between #{startmonth} and #{endmonth}
+    </select>
 </mapper>
