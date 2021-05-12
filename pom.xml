@@ -54,7 +54,7 @@
         <aliyun-java-sdk-core.version>4.5.0</aliyun-java-sdk-core.version>
         <httpclient.version>4.5.10</httpclient.version>
         <!-- 注意提取版本号 -->
-        <spring.security.version>5.0.5.RELEASE</spring.security.version>
+        <spring.security.version>5.2.10.RELEASE</spring.security.version>
     </properties>
     <dependencyManagement>
         <dependencies>
